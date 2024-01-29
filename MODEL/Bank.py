@@ -3,12 +3,8 @@ from BankCard import BankCard
 from BankNetwork import BankNetwork
 
 class Bank:
-    def __init__(self,name,code,bin):
-        self._accounts = []
+    def __init__(self,name):
         self.name = name
-        self.code = code
-        self.bin = bin
-        self.bankNetwork = BankNetwork()
 
     
     def createAccount(self,user):

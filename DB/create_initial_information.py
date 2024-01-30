@@ -9,14 +9,10 @@ db_cursor = db.cursor()
 
 #bank
 db_cursor.execute("DELETE FROM bank")
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("Crédit Agricole","131"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("Crédit Mutuel","132"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("La Banque Postale","970"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("LCL","972"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("Société Générale","973"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("BNP","974"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("Caisse d'Épargne","978"))
-db_cursor.execute("INSERT INTO bank (name,identifier) VALUES (%s,%s)",("La BRED","975"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("131","Crédit Agricole","http://localhost:5001"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("132","Crédit Mutuel","http://localhost:5002"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("970","La Banque Postale","http://localhost:5003"))
+
 
 #issuer
 db_cursor.execute("DELETE FROM issuer")
@@ -29,5 +25,22 @@ db_cursor.execute("DELETE FROM user")
 db_cursor.execute("INSERT INTO user (name,age) VALUES (%s,%s)",("Daniel",22))
 db_cursor.execute("INSERT INTO user (name,age) VALUES (%s,%s)",("Fernando",22))
 
+#account
+db_cursor.execute("""
+INSERT INTO account (id_user, balance, account_number)
+VALUES (
+    (SELECT id_user FROM user WHERE name = 'Daniel' ORDER BY id_user DESC LIMIT 1),
+    100,
+    '11111111'
+)
+""")
+db_cursor.execute("""
+INSERT INTO account (id_user, balance, account_number)
+VALUES (
+    (SELECT id_user FROM user WHERE name = 'Fernando' ORDER BY id_user DESC LIMIT 1),
+    10,
+    '22222222'
+)
+""")
 
 db.commit()

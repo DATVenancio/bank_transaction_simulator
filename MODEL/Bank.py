@@ -1,6 +1,6 @@
 from BankAccount import BankAccount
 from BankCard import BankCard
-from BankNetwork import BankNetwork
+from bank_transaction_simulator.MODEL.BankNetworkServer import BankNetwork
 
 class Bank:
     def __init__(self,name):

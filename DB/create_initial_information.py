@@ -38,7 +38,7 @@ db_cursor.execute("""
 INSERT INTO account (id_user, balance, account_number)
 VALUES (
     (SELECT id_user FROM user WHERE name = 'Fernando' ORDER BY id_user DESC LIMIT 1),
-    10,
+    100,
     '22222222'
 )
 """)

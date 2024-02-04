@@ -29,12 +29,23 @@ def _get_bank_url(id_bank):
 
 def _debit(bank_url,account_number,amount):
     data={"account_number":account_number,"amount":amount}
-    bank_url = f"http://localhost:5000/debit"
-    response = request_sender.post(bank_url,json=data)
+    bank_url = f"http://localhost:5000"
+    response = request_sender.post(bank_url+"/debit",json=data)
     if response.status_code != 200:
         print(f"Error (debit): {response.status_code}")
-        
+        return False
     
+    return response.json()
+
+def _credit(bank_url,account_number,amount):
+    data={"account_number":account_number,"amount":amount}
+    bank_url = f"http://localhost:5000"
+    response = request_sender.post(bank_url+"/credit",json=data)
+    if response.status_code != 200:
+        print(f"Error (credit): {response.status_code}")
+        return False
+    
+    return response.json()
 
 
 
@@ -42,18 +53,21 @@ def _debit(bank_url,account_number,amount):
 app = Flask(__name__)
 @app.route('/treat_transaction',methods=["POST"])
 def treat_transaction():
+    terminal_id_bank = request_receiver.json["terminal_id_bank"]
+    terminal_account_number = request_receiver.json["terminal_account_number"]
     card_number = request_receiver.json["card_number"]
     amount = request_receiver.json["amount"]
 
-    id_bank =_get_bank_id(card_number)
-    account_number = _get_account_number(card_number)
-    bank_url = _get_bank_url(id_bank)
+    user_id_bank =_get_bank_id(card_number)
+    user_account_number = _get_account_number(card_number)
+    user_bank_url = _get_bank_url(user_id_bank)
 
-    _debit(bank_url,account_number,amount)
+    terminal_bank_url = _get_bank_url(terminal_id_bank)
 
+    if(_debit(user_bank_url,user_account_number,amount)):
+        _credit(terminal_bank_url,terminal_account_number,amount)
 
-
-    return jsonify(bank_url)
+    return jsonify(True)
 
 
 

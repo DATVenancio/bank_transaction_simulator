@@ -53,7 +53,6 @@ class BankNetworkServer:
 
     def _debit(self,bank_url,account_number,amount):
         data={"account_number":account_number,"amount":amount}
-        bank_url = f"http://localhost:5000"
         response = request_sender.post(bank_url+"/debit",json=data)
         if response.status_code != 200:
             print(f"Error (debit): {response.status_code}")
@@ -63,7 +62,6 @@ class BankNetworkServer:
 
     def _credit(self,bank_url,account_number,amount):
         data={"account_number":account_number,"amount":amount}
-        bank_url = f"http://localhost:5000"
         response = request_sender.post(bank_url+"/credit",json=data)
         if response.status_code != 200:
             print(f"Error (credit): {response.status_code}")

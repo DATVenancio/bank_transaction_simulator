@@ -6,23 +6,28 @@ import requests as request_sender
 
 #db
 import mysql.connector
-db = mysql.connector.connect(
-    host="localhost",
-    user="daniel",
-    passwd="daniel",
-    database="bank_system"
-)
-db_cursor = db.cursor()
 
 class BankServer:
     def __init__(self):
-        db = mysql.connector.connect(
-            host="localhost",
-            user="daniel",
-            passwd="daniel",
-            database="bank_system"
+        self._set_server_values_as_none()
+        pass
+    #abstract method to implement in child
+    def _initial_server_configuration():
+        raise NotImplementedError
+    def _connect_db(self):
+        print(self.db_host)
+        print(self.db_user)
+        print(self.db_passwd)
+        print(self.db_name)
+        self.db = mysql.connector.connect(
+            host=self.db_host,
+            user=self.db_user,
+            passwd=self.db_passwd,
+            database=self.db_name
         )
-        self.db_cursor = db.cursor()
+        self.db_cursor = self.db.cursor()
+    def _create_api_routes(self):
+
         #api
         app = Flask(__name__)
         @app.route("/start_transaction",methods=["POST"])
@@ -56,41 +61,56 @@ class BankServer:
                 return jsonify(True)
             else:
                 return jsonify(False)
+        
+        @app.route("/account_balance",methods=["POST"])
+        def account_balance():
+            account_number=request_receiver.json["account_number"]
+            current_balance=self._account_balance(account_number)
+            return jsonify(current_balance)
 
+        app.run(port=self.api_port,host=self.api_host,debug=True)
+  
+    def _set_server_values_as_none(self):
+        self.db_host = None
+        self.db_user = None
+        self.db_passwd = None
+        self.db_name = None
 
-        app.run(port=5000,host="localhost",debug=True)
+        self.api_port = None
+        self.api_host = None
 
-
-
-
-        pass
     #internal functions
     def _check_valid_debit(self,account_number,amount):
-        db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
-        result = db_cursor.fetchone()
+        self.db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
+        result = self.db_cursor.fetchone()
         if result[0]>=amount:
             return True
         return False
     def _check_valid_credit(self,account_number):
-        db_cursor.execute("SELECT id_account FROM account WHERE account_number=(%s)",(account_number,))
-        result = db_cursor.fetchone()
+        self.db_cursor.execute("SELECT id_account FROM account WHERE account_number=(%s)",(account_number,))
+        result = self.db_cursor.fetchone()
 
         if result != None:
             return True
         return False
 
     def _debit(self,account_number,amount):
-        db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
-        current_balance = db_cursor.fetchone()
+        self.db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
+        current_balance = self.db_cursor.fetchone()
         new_balance = current_balance[0]-amount
-        db_cursor.execute("UPDATE account SET balance =(%s) WHERE account_number=(%s)",(new_balance,account_number))
-        db.commit()
+        self.db_cursor.execute("UPDATE account SET balance =(%s) WHERE account_number=(%s)",(new_balance,account_number))
+        self.db.commit()
 
     def _credit(self,account_number,amount):
-        db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
-        current_balance = db_cursor.fetchone()
+        self.db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
+        current_balance = self.db_cursor.fetchone()
         new_balance = current_balance[0]+amount
-        db_cursor.execute("UPDATE account SET balance =(%s) WHERE account_number=(%s)",(new_balance,account_number))
-        db.commit()
+        self.db_cursor.execute("UPDATE account SET balance =(%s) WHERE account_number=(%s)",(new_balance,account_number))
+        self.db.commit()
+    
+    def _account_balance(self,account_number):
+        self.db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
+        current_balance = self.db_cursor.fetchone()
+        return current_balance[0]
 
-server=BankServer()
+

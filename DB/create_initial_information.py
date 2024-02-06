@@ -1,9 +1,29 @@
+#credit agricole
 import mysql.connector
 db = mysql.connector.connect(
     host="localhost",
     user="daniel",
     passwd="daniel",
-    database="bank_system"
+    database="public_database"
+)
+db_cursor = db.cursor()
+
+#bank
+db_cursor.execute("DELETE FROM bank")
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("131","Crédit Agricole","http://localhost:5001"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("132","Crédit Mutuel","http://localhost:5002"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("970","La Banque Postale","http://localhost:5003"))
+db.commit()
+
+#___________________________________________________________________________
+
+#credit agricole
+import mysql.connector
+db = mysql.connector.connect(
+    host="localhost",
+    user="daniel",
+    passwd="daniel",
+    database="credit_agricole"
 )
 db_cursor = db.cursor()
 

@@ -5,6 +5,12 @@ db = mysql.connector.connect(
     passwd="daniel"
 )
 db_cursor = db.cursor()
-db_cursor.execute("DROP DATABASE IF EXISTS bank_system")
-db_cursor.execute("CREATE DATABASE bank_system")
+#credit agricole
+db_cursor.execute("DROP DATABASE IF EXISTS credit_agricole")
+db_cursor.execute("CREATE DATABASE credit_agricole")
+
+db_cursor.execute("DROP DATABASE IF EXISTS public_database")
+db_cursor.execute("CREATE DATABASE public_database")
+
+
 db.commit()

@@ -1,0 +1,4 @@
+from AccountInformationController import AccountInformationController
+
+account_information_controller = AccountInformationController()
+account_information_controller.start_screen()

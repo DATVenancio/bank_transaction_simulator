@@ -9,16 +9,21 @@ import mysql.connector
 
 class BankNetworkServer:
     def __init__(self):
-        
-        db = mysql.connector.connect(
-            host="localhost",
-            user="daniel",
-            passwd="daniel",
-            database="bank_system"
+        self._set_server_values_as_none()
+    def _connect_db(self):
+        print(self.db_host)
+        print(self.db_user)
+        print(self.db_passwd)
+        print(self.db_name)
+        self.db = mysql.connector.connect(
+            host=self.db_host,
+            user=self.db_user,
+            passwd=self.db_passwd,
+            database=self.db_name
         )
-        self.db_cursor = db.cursor()
+        self.db_cursor = self.db.cursor()
 
-
+    def _create_api_routes(self):
         app = Flask(__name__)
         @app.route('/treat_transaction',methods=["POST"])
         def treat_transaction():
@@ -37,7 +42,18 @@ class BankNetworkServer:
                 self._credit(terminal_bank_url,terminal_account_number,amount)
 
             return jsonify(True)
-        app.run(port=5010,host="localhost",debug=True)
+        app.run(port=self.api_port,host="localhost",debug=True)
+    def _initial_server_configuration():
+        raise NotImplementedError
+    
+    def _set_server_values_as_none(self):
+        self.db_host = None
+        self.db_user = None
+        self.db_passwd = None
+        self.db_name = None
+
+        self.api_port = None
+        self.api_host = None
 
     def _get_bank_id(self,card_number):
         return card_number[1:4]

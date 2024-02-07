@@ -8,9 +8,9 @@ class Terminal:
         self._access_public_database()
         
     
-    def start_transaction(self,card_number,amount):
+    def make_transaction(self,card_number,amount):
         if(self._check_information(card_number)):
-            self.__make_transaction(card_number,amount)
+            self._start_transaction(card_number,amount)
         
 
 
@@ -18,9 +18,9 @@ class Terminal:
         #validade,pin,
         return True
     
-    def __make_transaction(self,card_number,amount):
+    def _start_transaction(self,card_number,amount):
         card_id_bank =  self._get_bank_id(card_number)
-        url = self._get_bank_url(card_id_bank)
+        url = self._get_bank_url(card_id_bank)+"/start_transaction"
         parameters = {"terminal_id_bank":self.id_bank,
                       "terminal_account_number": self.account_number,
                       "card_number": card_number,

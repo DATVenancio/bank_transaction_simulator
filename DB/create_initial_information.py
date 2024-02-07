@@ -35,15 +35,14 @@ db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("970"
 
 
 #issuer
-db_cursor.execute("DELETE FROM issuer")
-db_cursor.execute("INSERT INTO issuer (name,code) VALUES (%s,%s)",("American Express","3"))
-db_cursor.execute("INSERT INTO issuer (name,code) VALUES (%s,%s)",("Visa","4"))
-db_cursor.execute("INSERT INTO issuer (name,code) VALUES (%s,%s)",("Mastercard","3"))
-
+db_cursor.execute("DELETE FROM bank_network")
+db_cursor.execute("INSERT INTO bank_network (name,code,url) VALUES (%s,%s,%s)",("American Express","3","http://localhost:5011"))
+db_cursor.execute("INSERT INTO bank_network (name,code,url) VALUES (%s,%s,%s)",("Visa","4","http://localhost:5012"))
+db_cursor.execute("INSERT INTO bank_network (name,code,url) VALUES (%s,%s,%s)",("Mastercard","5","http://localhost:5013"))
 #user
 db_cursor.execute("DELETE FROM user")
 db_cursor.execute("INSERT INTO user (name,age) VALUES (%s,%s)",("Daniel",22))
-db_cursor.execute("INSERT INTO user (name,age) VALUES (%s,%s)",("Fernando",22))
+
 
 #account
 db_cursor.execute("""
@@ -54,6 +53,40 @@ VALUES (
     '11111111'
 )
 """)
+
+db.commit()
+
+
+#___________________________________________________________________________
+
+#credit mutuel
+import mysql.connector
+db = mysql.connector.connect(
+    host="localhost",
+    user="daniel",
+    passwd="daniel",
+    database="credit_mutuel"
+)
+db_cursor = db.cursor()
+
+#bank
+db_cursor.execute("DELETE FROM bank")
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("131","Crédit Agricole","http://localhost:5001"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("132","Crédit Mutuel","http://localhost:5002"))
+db_cursor.execute("INSERT INTO bank (id_bank,name,url) VALUES (%s,%s,%s)",("970","La Banque Postale","http://localhost:5003"))
+
+
+#issuer
+db_cursor.execute("DELETE FROM bank_network")
+db_cursor.execute("INSERT INTO bank_network (name,code,url) VALUES (%s,%s,%s)",("American Express","3","http://localhost:5011"))
+db_cursor.execute("INSERT INTO bank_network (name,code,url) VALUES (%s,%s,%s)",("Visa","4","http://localhost:5012"))
+db_cursor.execute("INSERT INTO bank_network (name,code,url) VALUES (%s,%s,%s)",("Mastercard","5","http://localhost:5013"))
+#user
+db_cursor.execute("DELETE FROM user")
+db_cursor.execute("INSERT INTO user (name,age) VALUES (%s,%s)",("Fernando",22))
+
+#account
+
 db_cursor.execute("""
 INSERT INTO account (id_user, balance, account_number)
 VALUES (
@@ -62,5 +95,8 @@ VALUES (
     '22222222'
 )
 """)
+
+
+
 
 db.commit()

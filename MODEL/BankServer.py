@@ -32,7 +32,10 @@ class BankServer:
         app = Flask(__name__)
         @app.route("/start_transaction",methods=["POST"])
         def start_transaction():
-            url = f"http://localhost:5010/treat_transaction"
+            card_number=request_receiver.json["card_number"]
+            bank_network_code=card_number[0]
+            url =self._get_bank_network_url(bank_network_code)+"/treat_transaction"
+            #url = f"http://localhost:5010/treat_transaction"
             response = request_sender.post(url,json=request_receiver.json)
             if response.status_code == 200:
                 data = response.json()
@@ -70,6 +73,10 @@ class BankServer:
 
         app.run(port=self.api_port,host=self.api_host,debug=True)
   
+    def _get_bank_network_url(self,bank_network_code):
+        self.db_cursor.execute("SELECT url FROM bank_network WHERE code=(%s)",(bank_network_code,))
+        result = self.db_cursor.fetchone()
+        return result[0]
     def _set_server_values_as_none(self):
         self.db_host = None
         self.db_user = None

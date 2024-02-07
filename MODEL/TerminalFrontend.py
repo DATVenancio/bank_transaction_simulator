@@ -61,10 +61,10 @@ class TerminalFrontend(tk.Tk):
 
     def first_entry_pattern(self):
         self.amount_entry.insert(0,10)
-        self.card_number_entry.insert(0,113111111111)
+        self.card_number_entry.insert(0,313111111111)
         self.pin_entry.insert(0,1234)
 
     def second_entry_pattern(self):
         self.amount_entry.insert(0,10)
-        self.card_number_entry.insert(0,113122222222)
+        self.card_number_entry.insert(0,413222222222)
         self.pin_entry.insert(0,1234)

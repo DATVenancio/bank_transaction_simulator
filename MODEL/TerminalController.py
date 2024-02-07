@@ -9,4 +9,4 @@ class TerminalController:
         self.terminal_frontend.mainloop()
     
     def receive_form_information(self,card_number,amount,pin):
-        self.terminal.start_transaction(card_number,amount)
+        self.terminal.make_transaction(card_number,amount)

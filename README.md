@@ -18,7 +18,7 @@
     ```
     Une fois l'utilisateur créé, accédez au dossier DB et exécutez le fichier 'create_db.py' :
     ```bash
-    python create_db.py
+    python db_configuration.py
     ```
 
 ## Préparation des serveurs :

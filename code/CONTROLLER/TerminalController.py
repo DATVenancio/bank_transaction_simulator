@@ -1,5 +1,8 @@
-from Terminal import Terminal
-from TerminalFrontend import TerminalFrontend
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) #put the 'code' directory in the syspath
+from MODEL.Terminal import Terminal
+from VIEW.TerminalFrontend import TerminalFrontend
 class TerminalController:
     def __init__(self):
         self.terminal_frontend = TerminalFrontend(self)

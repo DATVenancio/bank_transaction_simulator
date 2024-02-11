@@ -1,4 +1,3 @@
-from crypt import methods
 from flask import Flask,jsonify
 from flask import request as request_receiver
 import requests as request_sender

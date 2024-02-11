@@ -1,5 +1,8 @@
-from AccountInformation import AccountInformation
-from AccountInformationFrontend import AccountInformationFrontend
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) #put the 'code' directory in the syspath
+from MODEL.AccountInformation import AccountInformation
+from VIEW.AccountInformationFrontend import AccountInformationFrontend
 class AccountInformationController:
     def __init__(self):
         self.account = None

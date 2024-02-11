@@ -1,3 +1,0 @@
-BANKCARD:
-Number : ABCD EFGH IJKL MNOP
-A : representa o banco 3 pour American Express, 4 pour Visa, 5 pour Mastercard

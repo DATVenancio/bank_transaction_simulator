@@ -113,14 +113,14 @@ class TerminalFrontend(tk.Tk):
     def first_entry_pattern(self):
         self.amount_entry.insert(0,1)
         self.card_number_entry.insert(0,3131111111111119)
-        self.cvv_entry.insert(0,1234)
+        self.cvv_entry.insert(0,111)
 
     def second_entry_pattern(self):
         self.amount_entry.insert(0,2)
         self.card_number_entry.insert(0,4132222222222229)
-        self.cvv_entry.insert(0,1234)
+        self.cvv_entry.insert(0,222)
     
     def third_entry_pattern(self):
         self.amount_entry.insert(0,10)
         self.card_number_entry.insert(0,3131000000000000)
-        self.cvv_entry.insert(0,1234)
+        self.cvv_entry.insert(0,000)

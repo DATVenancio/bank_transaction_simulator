@@ -35,21 +35,19 @@ class BankServer:
             card_number=request_receiver.json["card_number"]
             bank_network_code=card_number[0]
             url =self._get_bank_network_url(bank_network_code)+"/treat_transaction"
-            #url = f"http://localhost:5010/treat_transaction"
             response = request_sender.post(url,json=request_receiver.json)
             if response.status_code == 200:
-                data = response.json()
+                return(response.json())
             else:
                 print(f"Error (BS): {response.status_code}")
-
-            return(request_receiver.json)
 
 
         @app.route("/debit",methods=["POST"])
         def debit():
             account_number=request_receiver.json["account_number"]
             amount = request_receiver.json["amount"]
-            if(self._check_valid_debit(account_number,amount)):
+            cvv = request_receiver.json["cvv"]
+            if(self._check_valid_debit(account_number,amount,cvv)):
                 self._debit(account_number,amount)
                 return jsonify(True)
             else:
@@ -87,12 +85,18 @@ class BankServer:
         self.api_host = None
 
     #internal functions
-    def _check_valid_debit(self,account_number,amount):
-        self.db_cursor.execute("SELECT balance FROM account WHERE account_number=(%s)",(account_number,))
+    def _check_valid_debit(self,account_number,amount,cvv):
+        self.db_cursor.execute("SELECT balance,cvv FROM account WHERE account_number=(%s)",(account_number,))
         result = self.db_cursor.fetchone()
-        if result[0]>=amount:
-            return True
+        print("aquii: ")
+        print(result[1])
+        print(cvv)
+        if(result[1]==cvv):
+            print("entrou!")
+            if result[0]>=amount:
+                return True
         return False
+    
     def _check_valid_credit(self,account_number):
         self.db_cursor.execute("SELECT id_account FROM account WHERE account_number=(%s)",(account_number,))
         result = self.db_cursor.fetchone()

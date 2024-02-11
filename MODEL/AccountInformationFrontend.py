@@ -72,9 +72,9 @@ class AccountInformationFrontend(tk.Tk):
     
     def first_entry_pattern(self):
         self.bank_code_entry.insert(0,131)
-        self.account_number_entry.insert(0,11111111)
+        self.account_number_entry.insert(0,111111111119)
 
 
     def second_entry_pattern(self):
         self.bank_code_entry.insert(0,132)
-        self.account_number_entry.insert(0,22222222)
+        self.account_number_entry.insert(0,222222222229)

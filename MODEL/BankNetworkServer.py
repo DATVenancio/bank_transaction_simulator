@@ -10,11 +10,8 @@ import mysql.connector
 class BankNetworkServer:
     def __init__(self):
         self._set_server_values_as_none()
+        self.result_to_return = {"result_message":" ",}
     def _connect_db(self):
-        print(self.db_host)
-        print(self.db_user)
-        print(self.db_passwd)
-        print(self.db_name)
         self.db = mysql.connector.connect(
             host=self.db_host,
             user=self.db_user,
@@ -31,6 +28,7 @@ class BankNetworkServer:
             terminal_account_number = request_receiver.json["terminal_account_number"]
             card_number = request_receiver.json["card_number"]
             amount = request_receiver.json["amount"]
+            cvv = request_receiver.json["cvv"]
 
             user_id_bank =self._get_bank_id(card_number)
             user_account_number = self._get_account_number(card_number)
@@ -38,10 +36,14 @@ class BankNetworkServer:
 
             terminal_bank_url = self._get_bank_url(terminal_id_bank)
 
-            if(self._debit(user_bank_url,user_account_number,amount)):
+            if(self._debit(user_bank_url,user_account_number,amount,cvv)):
                 self._credit(terminal_bank_url,terminal_account_number,amount)
+                self.result_to_return["result_message"]="transaction accepted"
+            else:
+                self.result_to_return["result_message"]="transaction refused"
+            
+            return jsonify(self.result_to_return)
 
-            return jsonify(True)
         app.run(port=self.api_port,host="localhost",debug=True)
     def _initial_server_configuration():
         raise NotImplementedError
@@ -67,13 +69,12 @@ class BankNetworkServer:
             bank_url=result[0]
             return bank_url
 
-    def _debit(self,bank_url,account_number,amount):
-        data={"account_number":account_number,"amount":amount}
+    def _debit(self,bank_url,account_number,amount,cvv):
+        data={"account_number":account_number,"amount":amount,"cvv":cvv}
         response = request_sender.post(bank_url+"/debit",json=data)
         if response.status_code != 200:
             print(f"Error (debit): {response.status_code}")
             return False
-        
         return response.json()
 
     def _credit(self,bank_url,account_number,amount):

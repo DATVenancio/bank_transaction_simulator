@@ -14,10 +14,6 @@ class BankServer:
     def _initial_server_configuration():
         raise NotImplementedError
     def _connect_db(self):
-        print(self.db_host)
-        print(self.db_user)
-        print(self.db_passwd)
-        print(self.db_name)
         self.db = mysql.connector.connect(
             host=self.db_host,
             user=self.db_user,
@@ -87,11 +83,9 @@ class BankServer:
     def _check_valid_debit(self,account_number,amount,cvv):
         self.db_cursor.execute("SELECT balance,cvv FROM account WHERE account_number=(%s)",(account_number,))
         result = self.db_cursor.fetchone()
-        print("aquii: ")
-        print(result[1])
-        print(cvv)
+
         if(result[1]==cvv):
-            print("entrou!")
+
             if result[0]>=amount:
                 return True
         return False

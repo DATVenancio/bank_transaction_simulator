@@ -47,7 +47,7 @@ class Terminal:
 
     def _start_transaction(self,card_number,amount,cvv):
         card_id_bank =  self._get_bank_id(card_number)
-        url = self._get_bank_url(card_id_bank)+"/start_transaction"
+        url = self._get_bank_url(self.id_bank)+"/start_transaction"
         parameters = {"terminal_id_bank":self.id_bank,
                       "terminal_account_number": self.account_number,
                       "card_number": card_number,
